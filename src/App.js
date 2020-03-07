@@ -3,35 +3,63 @@ import logo from './logo.svg';
 import MapSVG from './data/korea_map.svg';
 import './App.css';
 import {ReactSVG} from 'react-svg';
-import request from 'request';
+import axios from 'axios';
 
 function Map()
 {
+  var [data,SetData] = useState();
   useEffect(() => {
-
+    axios.get('http://localhost:3001/city')
+    .then(function (response) {
+      SetData(response.data)
+      console.log(data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .finally(function () {
+      // always executed
+    });  
   },[]);
+
+  var data_render = <span>not</span>;
+  if(data != null)
+      data_render = <span>{data}</span>; 
   return (
-    <div>
-      <ReactSVG src={MapSVG} beforeInjection={svg => {
-    console.log(svg.querySelectorAll('polyline'))
-    svg.querySelectorAll('polyline').forEach(function(item,index){
     
-      item.setAttribute('style','fill:#000000');
-    });
-    svg.querySelector('path').setAttribute('style','fill:skyblue');
+    
+    <div>
+     <span>{JSON.stringify(data)}</span>
+      <ReactSVG src={MapSVG} beforeInjection={
+        svg => {
+      // svg.getElementsById('daegu').setAttribute
+       svg.querySelectorAll('polyline').forEach(function(item,index){
+       // item.setAttribute('style','fill:gray');
+ 
+       if(data != null){
+          data.forEach(function(elem,i){
+            if(item.id === elem.city)
+              {
+                var color = 255 - parseInt((elem.count / 6746) * 255);
+                console.log(color);
+                if(color < 250)
+                  item.setAttribute('style',`fill:rgb(255,${color},${color})`)
+
+              }
+            });
+         }
+      });
+        svg.querySelector('path').setAttribute('style','fill:skyblue');
   //  svg.setAttribute('style', 'width: 200px')
   
-  }} onClick={rq} />
+  }}/>
     </div>
   )
 
-  function rq()
+  function getData()
   {
-    request('http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13', function (error, response, body) {
-      console.error('error:', error); // Print the error if one occurred
-      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-      console.log('body:', body); // Print the HTML for the Google homepage.
-    });
+    
+      
   }
 }
 function App() {
