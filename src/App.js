@@ -7,9 +7,11 @@ import axios from 'axios';
 
 function Map()
 {
-  var [data,SetData] = useState();
+  var [data,SetData] = useState(null);
+
   useEffect(() => {
-    axios.get('http://localhost:3001/city')
+   // axios.get('http://localhost:3001/city')
+	  axios.get("http://covidapi.run.goorm.io/city")
     .then(function (response) {
       SetData(response.data)
       console.log(data);
@@ -22,6 +24,7 @@ function Map()
     });  
   },[]);
 
+	
   var data_render = <span>not</span>;
   if(data != null)
       data_render = <span>{data}</span>; 
@@ -31,44 +34,45 @@ function Map()
     <div>
      <span>{JSON.stringify(data)}</span>
       <ReactSVG src={MapSVG} beforeInjection={
-        svg => {
-          var all_city = [];
-          all_city = svg.querySelectorAll('polyline');
-          console.log(all_city);
-          all_city.forEach((v)=>console.log(v.id));
-      // svg.getElementsById('daegu').setAttribute
-       svg.querySelectorAll('polyline').forEach(function(item,index){
-       // item.setAttribute('style','fill:gray');
-        
-       if(data != null){
-          var EntireCount = data[data.length - 1]['death_count'];
-          data.forEach(function(elem,i){
-            if(item.id === elem.city)
-              {
-                var color = parseInt((elem.count / EntireCount) * 100);
+        svg => svg_data_load(svg)
+  }/>
+    </div>
+  )
+  function svg_data_load(svg)
+	{
+         var all_city = [];
+          all_city = Array.from(svg.querySelectorAll('polyline'));
+		  all_city = all_city.concat(Array.from(svg.querySelectorAll('path')));
 
+
+       if(data){
+          var EntireCount = data[data.length - 1]['death_count'];
+		   
+          data.forEach(function(elem,i){
+			  
+			  var find_elem;
+				  all_city.some((v)=>{
+                   if(v.id.includes(elem.city))
+					{
+                         find_elem=v;
+						return true;
+                    }
+              });
+
+            if(find_elem)
+              {
+                var color = parseInt(((data.count-1) / EntireCount) * 100);
                 var percent = (17*50/i);
-                item.setAttribute('style',`fill:hsl(0,100%,${percent+'%'});stroke:lightgray`);
-                item.onclick = () => alert(item.id);
-                item.onmouseenter = () => item.setAttribute('style',`fill:hsl(0,100%,${(percent + 10)+'%'});stroke:lightgray`);
-                item.onmouseleave = () =>  item.setAttribute('style',`fill:hsl(0,100%,${percent+'%'});stroke:lightgray`);
+                find_elem.setAttribute('style',`fill:hsl(0,100%,${percent+'%'});stroke:lightgray`);
+                find_elem.onclick = () => alert(find_elem.id);
+                find_elem.onmouseenter = () => find_elem.setAttribute('style',`fill:hsl(0,100%,${(percent + 10)+'%'});stroke:lightgray`);
+                find_elem.onmouseleave = () =>  find_elem.setAttribute('style',`fill:hsl(0,100%,${percent+'%'});stroke:lightgray`);
               
               }
             });
-         }
-      });
-        svg.querySelector('path').setAttribute('style','fill:skyblue');
-  //  svg.setAttribute('style', 'width: 200px')
-  
-  }}/>
-    </div>
-  )
-
-  function getData()
-  {
-    
-      
-  }
+    }
+ 
+}
 }
 function App() {
   
