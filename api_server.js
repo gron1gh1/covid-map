@@ -9,15 +9,33 @@ var app = express();
 
 app.use(cors());
 app.use(express.json());
+
+function normalize(min, max) {
+  var delta = max - min;
+  return function (val) {
+      return (val - min) / delta;
+  };
+}
+
+function normalizeArray(array) {
+  var minValue = Math.min(...array);
+  var maxValue = Math.max(...array);
+  return array.map(normalize(minValue, maxValue));
+}
 app.get('/city', function (req, res,next) {
   request('http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13', function (error, response, body) {
       const $ = cheerio.load(body);
-      const $data = $("div.container div.content div.maparea div#maplayout");
-      var info = $data.text().replace(/[\n\t]/g,'');
-      var info = info.split('명');
-      var map = info.map(function(elem)
-        {
-          var city_name = elem.substr(0,2);
+      
+     
+
+      const $data2 = $("div.container div.content div.maplist");
+      var info = $data2.text().replace(/[\n\t]/g,'');
+      var res_arr = [];
+      info = info.split('명');
+      info = info.map(v => v.replace('확진환자수',''));
+      info.forEach((v,i) =>{
+        if(i % 2 == 0){
+        var city_name = v.substr(0,2);
           city_name = city_name.replace('충남','chungnam');
           city_name = city_name.replace('제주','jeju');
           city_name = city_name.replace('경남','gyeongnam');
@@ -35,16 +53,24 @@ app.get('/city', function (req, res,next) {
           city_name = city_name.replace('서울','seoul');
           city_name = city_name.replace('광주','gwanju');
           city_name = city_name.replace('세종','sejong');
-         
-          let p ={
-            city: city_name,
-            count: parseInt(elem.substring(2))
-          };
-          return p;
+          res_arr.push(
+            {
+              city: city_name,
+              count: parseInt(v.substring(2)),
+              death_count: 0
+            }
+          );
         }
-      );
-      map.pop();
-      res.json(map)
+        else{
+          res_arr[res_arr.length - 1]['death_count'] = parseInt(v.substring(4));
+
+        }
+      })
+      res_arr.pop();
+      res_arr.sort((a,b) => a.count - b.count);
+
+      console.log(res_arr);
+      res.json(res_arr)
 
 });
  
