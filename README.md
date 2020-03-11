@@ -1,7 +1,7 @@
 # covid-map
 코로나 바이러스 데이터 시각화 입니다.
 
-**기술 스택**
+**기술 스택**<br>
 Node.js: API 서버<br>
 React: FrontEnd
 
