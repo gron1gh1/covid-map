@@ -7,11 +7,10 @@ React: FrontEnd
 
 **데이터 제공 ( 2020-03-11 기준)**<br>
 http://ncov.mohw.go.kr/
-# Preview
-![Alt Text](https://github.com/gron1gh1/covid-map/blob/master/preview.png)
-
 # Run
 ~~~
 yarn install
 yarn dev
 ~~~
+# Preview
+![Alt Text](https://github.com/gron1gh1/covid-map/blob/master/preview.png)
