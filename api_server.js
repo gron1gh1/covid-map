@@ -31,23 +31,7 @@ app.get('/city', function (req, res, next) {
     for (var idx = 1; idx <= 18; idx++) {
       var $info = $data.children(`tr:nth-child(${idx})`);
       var city_name = $info.children('th').text();
-      city_name = city_name.replace('충남', 'chungnam');
-      city_name = city_name.replace('제주', 'jeju');
-      city_name = city_name.replace('경남', 'gyeongnam');
-      city_name = city_name.replace('경북', 'gyeongbuk');
-      city_name = city_name.replace('전북', 'jeonbuk');
-      city_name = city_name.replace('충북', 'chungbuk');
-      city_name = city_name.replace('강원', 'gangwon');
-      city_name = city_name.replace('경기', 'gyeonggi');
-      city_name = city_name.replace('전남', 'jeonnam');
-      city_name = city_name.replace('울산', 'ulsan');
-      city_name = city_name.replace('부산', 'busan');
-      city_name = city_name.replace('대구', 'daegu');
-      city_name = city_name.replace('대전', 'daejeon');
-      city_name = city_name.replace('인천', 'incheon');
-      city_name = city_name.replace('서울', 'seoul');
-      city_name = city_name.replace('광주', 'gwanju');
-      city_name = city_name.replace('세종', 'sejong');
+     
       var city_info = {
         city: city_name,
         prev_day: $info.children('td:nth-child(2)').text(),
