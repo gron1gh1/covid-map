@@ -28,7 +28,7 @@ function CovidItem(props)
     </Popover>
     )
 }
-function CovidMap({map_data,map_load}) {
+function CovidMap({map_data}) {
   //  var [map_data, SetData] = useState(null);
     var [render,SetRender] = useState({
         show: false,
@@ -39,10 +39,7 @@ function CovidMap({map_data,map_load}) {
         x: 0,
         y: 0
     });
-    useEffect(() => {
-      map_load();
-      
-    }, []);
+
 
     function ShowComponent()
     {
@@ -52,10 +49,10 @@ function CovidMap({map_data,map_load}) {
     return (
       
       <div class='screen'>
-        <button onClick={() => console.log(map_data)}>AA</button>
-        {map_data && map_data.length != 0 && <CovidItem {...map_data[map_data.length -1]} x={10} y={10}/>}
-        {map_data && map_data.length != 0 && ShowComponent()}
-        {map_data && map_data.length != 0 && <ReactSVG src={MapSVG} beforeInjection={
+        
+        {map_data && map_data.length > 0 && <CovidItem {...map_data[map_data.length -1]} x={10} y={10}/>}
+        {map_data && map_data.length > 0 && ShowComponent()}
+        {map_data && map_data.length > 0 && <ReactSVG src={MapSVG} beforeInjection={
           svg => svg_data_load(svg)
         } />}
       </div>

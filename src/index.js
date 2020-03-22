@@ -4,13 +4,13 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import {combineReducers ,createStore} from 'redux';
+import {combineReducers ,createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
-import CovidMapRedux from './CovidMapRedux'
+import ReduxThunk from 'redux-thunk';
+import covidmap from './CovidMapReducer';
 
-
-const rootReducer = combineReducers({CovidMapRedux,});
-const store = createStore(rootReducer);
+const rootReducer = combineReducers({covidmap});
+const store = createStore(rootReducer,applyMiddleware(ReduxThunk));
 ReactDOM.render(
     <Provider store={store}>
         <App />

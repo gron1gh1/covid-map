@@ -4,7 +4,7 @@ import CovidMapContainer from './CovidMapContainer';
 function App() {
 
   return (
-    <CovidMapContainer />
+    <CovidMapContainer/>
   );
 }
 

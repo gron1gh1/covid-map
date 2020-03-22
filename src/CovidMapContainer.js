@@ -1,26 +1,20 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
+import {useDispatch,useSelector} from 'react-redux';
 import CovidMap from './CovidMap';
-import {load} from './CovidMapRedux';
+import {setData, fetchData} from './CovidMapReducer';
 import { useEffect } from 'react';
 
-function CovidMapContainer(props){
-    const handleLoad = () =>{
-        props.map_load();
-    };
 
-    const {map_data} = props;
+export default function CovidMapContainer(props){
+    const dispatch = useDispatch();
+    const map_data = useSelector((state)=>state.covidmap.map_data);
+
+    useEffect(()=>{
+      
+        dispatch(fetchData());
+        console.log(map_data);
+    },[])
     return (
-      <CovidMap map_data={map_data} map_load={handleLoad}/>
+      <CovidMap map_data={map_data}/>
     )
 }
-
-const mapStateToProps = ({CovidMapRedux}) => ({
-    map_data: CovidMapRedux.map_data,
-});
-const mapDispatchToProps = dispatch => {
-    return {
-        map_load: () => dispatch(load()),
-    }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(CovidMapContainer);

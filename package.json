@@ -20,6 +20,7 @@
     "react-scripts": "3.4.0",
     "react-svg": "^11.0.12",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "request": "^2.88.2",
     "skmeans": "^0.11.3",
     "svg-injector": "^1.1.3"
