@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import CovidMap from './CovidMap';
+import CovidMapContainer from './CovidMapContainer';
 function App() {
 
   return (
-    <CovidMap />
+    <CovidMapContainer />
   );
 }
 
